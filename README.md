@@ -1,6 +1,6 @@
-#Abstract and Mock Class Helping Creator
+# Abstract and Mock Class Helping Creator
 
-##Requirement
+## Requirement
 * Python >=3.6
 * PySide2/Qt >=5.14
 
