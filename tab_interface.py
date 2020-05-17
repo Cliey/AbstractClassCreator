@@ -3,7 +3,7 @@ from PySide2.QtCore import Slot
 import sys
 from panels.left_panel import LeftPanel
 from panels.right_panel import RightPanel
-import class_to_interface
+import ClassParsing.class_to_interface
 
 class InterfaceTab(QtWidgets.QWidget):
     def __init__(self):
@@ -24,7 +24,7 @@ class InterfaceTab(QtWidgets.QWidget):
         file = open(source_file_path, "r")
         file_content = file.readlines()
         file.close()
-        worker = class_to_interface.ClassToInterface(file_content, dest_file_path, interface_name)
+        worker = ClassParsing.class_to_interface.ClassToInterface(file_content, dest_file_path, interface_name)
         worker.exec()
         self.right_panel.update_panel(dest_file_path)
         self.left_panel.update_done_label()

@@ -15,7 +15,6 @@ New class is saved in the folder selected as: ***Prefix**FileSelected.hpp*
 **For Mock Class, you have to add th path to the Interface Class file.**
 
 ## Improvement
-* Template return type are not supported yet
 * If forward declaration of class in Interface Class File, it will appear in MockClass File
 
 ## How to use this tool

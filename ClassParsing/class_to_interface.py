@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import re
-from class_parsing import AbstractClassParsing
+from ClassParsing.class_parsing import AbstractClassParsing
 
 class ClassToInterface(AbstractClassParsing):
     def __init__(self, file_content, new_file_path, prefix):
@@ -15,11 +15,16 @@ class ClassToInterface(AbstractClassParsing):
         return elt
 
     def create_pattern_function(self):
-        """pattern_tab = "(\s*)"
-        pattern_function_return = "(?:\w+(?:\:\:)?)+ "
-        pattern_function = "(?:.*\(.*\))" anything(anything)
-        pattern_end_of_line = ";\n"""
-        return "^(?P<indent>\s*)(?P<function_prototype>(?:\w+(?:\:\:)?)+ (?:.*\(.*\));\n)$"
+        """Pattern to get info about function parsed.
+        Can parse :
+            - namespace::A<namespace::type>
+            - const fct(Arg1, Arg2) const;
+        Regex :
+            ^(?P<indent>\s*)(?P<function_prototype>(?:const )?(?P<type>(?:\w+(?:\:\:)?)+)(?P<subtype><?(?P>type)>?)? (?:.*\(.*\))(?: const)?;\n)$"""
+
+        type_regex = "(?:(?:\w+(?:\:\:)?)+)"
+        regex = "^(?P<indent>\s*)(?P<function_prototype>(?:const )?" + type_regex + "(?P<subtype><?" + type_regex + ">?)? (?:.*\(.*\))(?: const)?;\n)$"
+        return regex
 
     def parse_file_content_and_write(self):
         interface_file = open(self.new_file_path, "w")
@@ -30,18 +35,3 @@ class ClassToInterface(AbstractClassParsing):
             new_line = super().parse_line(line)
             interface_file.write(new_line)
         interface_file.close()
-
-
-if __name__ == "__main__":
-    file = open("cpp_files/TableModifier.hpp", "r")
-    file_content = file.readlines()
-    file.close()
-
-    interfaceCreator = ClassToInterface(file_content, "./cpp_files/ITableModifierNew.hpp", "I")
-    interfaceCreator.exec()
-
-    file = open("cpp_files/TableTest.hpp", "r")
-    file_content = file.readlines()
-    file.close()
-    interfaceCreator = ClassToInterface(file_content, "./cpp_files/ITableTestNew.hpp", "I")
-    interfaceCreator.exec()
